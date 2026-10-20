@@ -8,34 +8,42 @@ class Moderation(commands.Cog):
         self.bot = bot
         
         #Mute user
-        @bot.tree.command(
-                name="mute",
-                description="Mute a member for X amount of minues"
-                        )
+        @bot.tree.command(name="mute", description="Mute a member so they cannot type")
         @app_commands.default_permissions(moderate_members=True)
-        async def mute(i: discord.Interaction, member: discord.Member, minutes: int , reason: str=" "):
-            await member.timeout(datetime.timedelta(minutes=minutes))
-            await i.response.send_message(f"{member} was muted for {minutes} minutes | {reason}")
+        async def mute(i: discord.Interaction, member: discord.Member, minutes: int , reason: str="No reason provided"):
+            await member.timeout(datetime.timedelta(minutes=minutes),reason=reason)
+            embed = discord.Embed(title="🔇User Muted", description=(
+                                f"**Member:** {member.mention} \n"
+                                f"**Duration:** {minutes} minutes \n"
+                                f"**Reason:** {reason}" ),
+                                color=discord.Color.blurple())
+            embed.set_footer(text="Moderation • Timeout")
+            await i.response.send_message(embed=embed)
 
         #Kick user
-        @bot.tree.command(
-                name="kick",
-                description="Kick a member"
-                        )
+        @bot.tree.command(name="kick",description="Kick a member")
         @app_commands.default_permissions(kick_members=True)
-        async def kick(i: discord.Interaction, member: discord.Member, reason: str=" "):
+        async def kick(i: discord.Interaction, member: discord.Member, reason: str="No reason provided"):
             await member.kick()
-            await i.response.send_message(f"{member} was kicked | {reason}")
+            embed = discord.Embed(title="👢User Kicked", description=(
+                                            f"**Member:** {member.mention} \n"
+                                            f"**Reason:** {reason}" ),
+                                            color=discord.Color.blurple())
+            embed.set_footer(text="Moderation • Kick")
+            await i.response.send_message(embed=embed)
+            
 
         #Ban user command
-        @bot.tree.command(
-                name="ban",
-                description="Ban a member"
-                        )
+        @bot.tree.command(name="ban",description="Ban a member")
         @app_commands.default_permissions(ban_members=True)
-        async def ban(i: discord.Interaction, member: discord.Member, reason: str=" "):
+        async def ban(i: discord.Interaction, member: discord.Member, reason: str="No reason provided"):
             await member.ban()
-            await i.response.send_message(f"{member} was banned | {reason}")
+            embed = discord.Embed(title="🔨User Banned", description=(
+                                            f"**Member:** {member.mention} \n"
+                                            f"**Reason:** {reason}" ),
+                                            color=discord.Color.blurple())
+            embed.set_footer(text="Moderation • Ban")
+            await i.response.send_message(embed=embed)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Moderation(bot))
