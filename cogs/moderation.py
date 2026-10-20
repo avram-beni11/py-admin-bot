@@ -10,11 +10,11 @@ class Moderation(commands.Cog):
         #Mute user
         @bot.tree.command(name="mute", description="Mute a member so they cannot type")
         @app_commands.default_permissions(moderate_members=True)
-        async def mute(i: discord.Interaction, member: discord.Member, minutes: int , reason: str="No reason provided"):
-            await member.timeout(datetime.timedelta(minutes=minutes),reason=reason)
+        async def mute(i: discord.Interaction, member: discord.Member, duration: int , reason: str="No reason provided"):
+            await member.timeout(datetime.timedelta(duration),reason=reason)
             embed = discord.Embed(title="🔇User Muted", description=(
                                 f"**Member:** {member.mention} \n"
-                                f"**Duration:** {minutes} minutes \n"
+                                f"**Duration:** {duration} minutes \n"
                                 f"**Reason:** {reason}" ),
                                 color=discord.Color.blurple())
             embed.set_footer(text="Moderation • Timeout")
